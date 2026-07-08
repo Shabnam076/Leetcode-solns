@@ -1,18 +1,20 @@
 class Solution {
 public:
-    //Tabulation
-
+    //2d space optimization
     bool isMatch(string s, string p) {
         int m = s.length();
         int n = p.length();
 
-        vector<vector<bool>> dp(n+1,vector<bool>(m+1,false));
+        vector<bool> prev(m+1,false),curr(m+1,false);
 
-        dp[0][0] = 1;
+        prev[0] = 1;
         for(int j = 1; j <= m; j++){
-            dp[0][j] = 0;
+            prev[j] = 0;
         }
+    
+
         for(int i = 1; i <= n; i++){
+            //calculating 0th element of curr everytime
             int flag = true;
             for(int k = 1; k <= i; k++){
                 if(p[k-1] != '*'){
@@ -20,23 +22,22 @@ public:
                     break;
                 }
             }
-            dp[i][0] = flag;    
-        }
+            curr[0] = flag; 
 
-        for(int i = 1; i <= n; i++){
             for(int j = 1; j <= m; j++){
-                if(p[i-1] == s[j-1] || p[i-1] == '?') dp[i][j] = dp[i-1][j-1];
+                if(p[i-1] == s[j-1] || p[i-1] == '?') curr[j] = prev[j-1];  //matching
 
                 else if(p[i-1] == '*'){
-                    dp[i][j] = dp[i-1][j] || dp[i][j-1];
+                    curr[j] = prev[j] || curr[j-1];  //* case
                 }
 
-                else dp[i][j] = false;
+                else curr[j] = false; //not matching
 
             }
+            prev = curr;
         }
 
-        return dp[n][m];  
+        return prev[m];  
     }
 
 };
