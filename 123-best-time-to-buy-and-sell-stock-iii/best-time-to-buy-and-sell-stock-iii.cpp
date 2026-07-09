@@ -1,32 +1,37 @@
 class Solution {
 public:
-    //tabulation
+    //Most space optimized - n*4 
     int maxProfit(vector<int>& prices) {
         int n = prices.size();
-        vector<vector<vector<long long>>> dp(n+1,vector<vector<long long>>(2,vector<long long>(3,0)));
 
-        //since dp is initialized with 0, base case is covered already, we just have to make sure that we dont
-        ///overwrite it: so i : 0 to n-1, buy = 0 to 1, cap = 1 to 2.
-        //i == n and cap = 0 is the base case so we will not run the code for these.
+        vector<long long> next(5, 0);
+        vector<long long> curr(5, 0);
 
-        for(int i = n-1; i >= 0; i--){
-            for(int buy = 0; buy <= 1; buy++){
-                for(int cap = 1; cap <= 2; cap++){
-                    long long profit = 0;
-                    if(buy){
-                        profit = max(-prices[i] + dp[i+1][0][cap],dp[i+1][1][cap]);
-                    }
+        for(int i = n - 1; i >= 0; i--) {
 
-                    else{
-                        profit = max(prices[i] + dp[i+1][1][cap-1],dp[i+1][0][cap]);
-                    }
+            for(int trans = 3; trans >= 0; trans--) {
 
-                    dp[i][buy][cap] =  profit;
+                long long profit = 0;
 
+                if(trans % 2 == 0) {
+                    profit = max(
+                        -prices[i] + next[trans + 1],
+                        next[trans]
+                    );
                 }
+                else {
+                    profit = max(
+                        prices[i] + next[trans + 1],
+                        next[trans]
+                    );
+                }
+
+                curr[trans] = profit;
             }
+
+            next = curr;
         }
 
-        return (int)dp[0][1][2];    
+        return (int)next[0];
     }
 };
