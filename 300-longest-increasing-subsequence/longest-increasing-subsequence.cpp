@@ -1,25 +1,19 @@
 class Solution {
 public:
-    int f(int i, int last, vector<int> &nums,vector<vector<int>> &dp){
-        int n = nums.size();
-        
-        if(i > n)return 0;
-        
-        if(dp[i][last] != -1)return dp[i][last];
-        
-        int take = 0;
-        if(last == 0 || nums[i-1] > nums[last - 1]) take = 1 + f(i+1,i,nums,dp);
-        
-        int nt = f(i+1,last,nums,dp);
-        
-        return dp[i][last] = max(take, nt);
-    }
-
+    //Tabulation
     int lengthOfLIS(vector<int>& nums) {
         int n = nums.size();
-      
-       vector<vector<int>> dp(n+1,vector<int>(n+1,-1));
-       return f(1,0,nums,dp);
-        
+        vector<vector<int>> dp(n+2, vector<int>(n+2,0));
+
+        for(int i = n; i >= 1; i--){
+            for(int last = 0; last < i; last++){
+                int take = 0;
+                if(last == 0 || nums[i-1] > nums[last-1]) take = 1 + dp[i+1][i];
+                int nt = dp[i+1][last];
+
+                dp[i][last] = max(take,nt);
+            }
+        }
+        return dp[1][0];
     }
 };
