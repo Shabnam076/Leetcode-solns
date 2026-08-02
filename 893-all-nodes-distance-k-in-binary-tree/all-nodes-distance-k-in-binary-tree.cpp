@@ -9,7 +9,7 @@
  */
 
 class Solution {
-    //using dfs 
+    //using bfs 
 public:
     void f(TreeNode* root, unordered_map<TreeNode*, TreeNode*> &parent){
         if(!root)return;
@@ -21,19 +21,43 @@ public:
         f(root->right,parent);
     }
 
-    void distanceK(TreeNode* root,int k, unordered_map<TreeNode*,TreeNode*> &parent, vector<int> &ans,int cnt,unordered_set<TreeNode*> &visited){
-        if(!root) return;
-        if(visited.count(root))return;
+    void distanceK(TreeNode* root,int k, unordered_map<TreeNode*,TreeNode*> &parent, vector<int> &ans){
+        queue<TreeNode*> q;
+        q.push(root);
 
-        visited.insert(root);  //mark visited
+        unordered_set<TreeNode*> visited;
+        visited.insert(root);
+        int cnt = 0;
+        while(!q.empty()){
+            if(cnt == k) break;
+            int size = q.size();
+            for(int i = 0; i < size; i++){
 
-        if(cnt == k){
-            ans.push_back(root->val);
-            return;
+                TreeNode* p = q.front();
+                q.pop();
+
+                if(p->left && !visited.count(p->left) ){
+                    q.push(p->left);
+                    visited.insert(p->left);
+                }
+                if(p->right && !visited.count(p->right)){
+                    q.push(p->right);
+                    visited.insert(p->right);
+                }
+                if(parent[p] && !visited.count(parent[p])){
+                    q.push(parent[p]);
+                    visited.insert(parent[p]);
+                }
+            }
+            cnt++;
         }
-        distanceK(root->left,k,parent,ans,cnt+1,visited);
-        distanceK(root->right,k,parent,ans,cnt+1,visited);
-        distanceK(parent[root],k,parent,ans,cnt+1,visited);
+
+        while(!q.empty()){
+            TreeNode* cur = q.front();
+            ans.push_back(cur->val);
+            q.pop();
+        }
+        
     }
 
     vector<int> distanceK(TreeNode* root, TreeNode* target, int k) {
@@ -42,8 +66,7 @@ public:
         f(root,parent);
 
         vector<int> ans;
-        unordered_set<TreeNode*> visited;
-        distanceK(target,k,parent,ans,0,visited);
+        distanceK(target,k,parent,ans);
         return ans;
     }
 };
