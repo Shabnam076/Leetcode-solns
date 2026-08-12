@@ -1,29 +1,29 @@
 class Solution {
 public:
-    //memoization
-    int f(int i, int amount, vector<int> &coins, vector<vector<int>> &dp){
-        if(amount == 0)return 1;
-        //base case
-        if(i == 1){
-            if(amount % coins[i-1] == 0) return 1;
-            else return 0;
-        }
-
-        if(dp[i][amount] != -1) return dp[i][amount];
-
-        int take = 0;
-        if(amount >= coins[i-1]) take = f(i, amount - coins[i-1], coins,dp);
-        
-        int nt = f(i-1, amount, coins,dp);
-
-        return dp[i][amount] = take + nt;
-    }
-
+typedef long long int ll;
+    //tabulation
     int change(int amount, vector<int>& coins) {
-        if(amount == 0)return 1;
 
         int n = coins.size();
-        vector<vector<int>> dp(n+1,vector<int>(amount+1,-1));
-        return f(n,amount,coins,dp);
+        vector<vector<unsigned long long>> dp(n+1,vector<unsigned long long>(amount+1,-1));
+
+        for(int j = 1; j < amount+1; j++){
+            dp[0][j] = 0;
+        }
+        for(int i = 0; i <= n; i++){
+            dp[i][0] = 1;
+        }
+
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= amount; j++){
+                unsigned long long take = 0;
+                if(j >= coins[i-1]) take = dp[i][j - coins[i-1]];
+                
+                unsigned long long nt = dp[i-1][j];
+                dp[i][j] = take + nt;
+            }
+        }
+
+        return dp[n][amount];
     }
 };
