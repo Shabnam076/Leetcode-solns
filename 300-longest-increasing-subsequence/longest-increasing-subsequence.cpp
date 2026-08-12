@@ -1,6 +1,23 @@
 class Solution {
 public:
-    //Memoization
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> temp;
+        temp.push_back(nums[0]);
+        for(int i = 1; i < n; i++){
+            if(nums[i] > temp.back()) temp.push_back(nums[i]);
+
+            else{
+                int p = lower_bound(temp.begin(), temp.end(), nums[i]) - temp.begin();  // lower_bound() → iterator deta hai
+                                                                                        //iterator - begin() → index deta hai
+                temp[p] = nums[i];        
+            }
+        }
+
+        return temp.size();
+    }
+    /*
+    //Memoization - O(n²), O(n)
     int f(int i, int last, vector<int> &nums,vector<vector<int>> &dp){
         int n = nums.size();
         //base case
@@ -20,4 +37,5 @@ public:
         vector<vector<int>> dp(n,vector<int>(n+1,-1));
         return f(0, n, nums,dp);
     }
+    */
 };
