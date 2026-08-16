@@ -1,5 +1,23 @@
 class Solution {
 public:
+    
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        sort(intervals.begin(),intervals.end());
+
+        vector<vector<int>> ans;
+        for(int i = 0 ; i < n; i++){
+            if(ans.empty() || intervals[i][0] > ans.back()[1]){ //new interval
+                ans.push_back({intervals[i][0],intervals[i][1]});
+            }
+            else{  //overlapping -> merge
+                ans.back()[1] = max(ans.back()[1],intervals[i][1]);  
+            }
+        }
+        return ans;
+    }
+
+    /*
     //brute force : O(nlogn + 2n), why 2n? because atmost every ele is touched 2ice
     //space : O(n), if no overlappng, you save all the ele
     vector<vector<int>> merge(vector<vector<int>>& intervals) {
@@ -22,4 +40,5 @@ public:
         }
         return ans;
     }
+    */
 };
