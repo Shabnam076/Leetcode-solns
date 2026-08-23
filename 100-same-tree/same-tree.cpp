@@ -11,18 +11,17 @@
  */
 class Solution {
 public:
+    //preorder traversal
     bool same(TreeNode* p, TreeNode* q){
-        if(p == NULL && q == NULL)return true;
-        if(!p || !q)return false;
-        if(p->val!= q->val)return false;
-        
+        if(!p && !q) return true;
+        if(!p || !q) return false;
+
+        if(p->val != q->val) return false;
+
         bool left = same(p->left,q->left);
-        if(left == 0)return false;
+        bool right = same(p->right,q->right);
 
-        bool right = same(p->right, q->right);
-        if(right == 0)return false;
-
-        return true;
+        return left && right; 
     }
     bool isSameTree(TreeNode* p, TreeNode* q) {
         return same(p, q);
