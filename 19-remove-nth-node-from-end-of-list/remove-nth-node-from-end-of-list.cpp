@@ -10,6 +10,29 @@
  */
 class Solution {
 public:
+    //Two Pointers - Single Pass, O(n), O(1)
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode(0);
+        dummy->next = head;
+
+        ListNode* cur = dummy;
+        while(n+1){    //for n+1 gap
+            cur = cur->next;
+            n--;
+        }
+
+        ListNode* prev = dummy;
+        while(cur){             //when cur = end(nullptr), prev will be 1 node     
+            cur = cur->next;      //behind nth node from back
+            prev = prev->next;
+        }
+
+        prev->next = prev->next->next;
+
+        return dummy->next;
+    }
+    
+    /*
     //brute : two passes - O(2L), O(1)
     int length(ListNode* head){
         ListNode* cur = head;
@@ -42,7 +65,7 @@ public:
             cur = cur->next;
         }
 
-        return head;
-        
+        return head;  
     }
+    */
 };
