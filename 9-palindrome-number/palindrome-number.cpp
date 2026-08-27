@@ -4,18 +4,14 @@ public:
         if(x < 0) return false;
         if(x == 0) return true;
         
-        string rev = "";
-        int ori = x;
+        string rev = to_string(x);
+        int l = 0, r = rev.length()-1;
 
-        while(x){
-            int rem = x % 10;
-            rev += to_string(rem);
-
-            x = x/10;
+        while(l <= r){
+            if(rev[l] != rev[r]) return false;
+            l++; r--;
         }
 
-        int reverse = stoll(rev);
-        if(ori == reverse) return true;
-        return false;
+        return true;
     }
 };
