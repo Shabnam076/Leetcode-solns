@@ -1,7 +1,7 @@
 class Solution {
 public:
     
-    //Brute : O(mn × 4^L) time, O(L) space where L = recursion stack space
+    //optimal : O(mn × 4^L) time, O(L) space where L = recursion stack space
     bool exist(vector<vector<char>>& board, string word) {
         int n = board.size();
         int m = board[0].size();
